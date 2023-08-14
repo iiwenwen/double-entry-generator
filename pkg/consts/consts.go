@@ -38,4 +38,6 @@ const (
 	ProviderBmo = "bmo"
 	//ProviderBocm is the name for BOCM provider.
 	ProviderBocm = "bocm"
+	//ProviderBocm is the name for NDNP provider.
+	ProviderNdnp = "ndnp"
 )

@@ -6,6 +6,7 @@ import (
 	"github.com/deb-sig/double-entry-generator/pkg/analyser/bmo"
 	"github.com/deb-sig/double-entry-generator/pkg/analyser/bocm"
 	"github.com/deb-sig/double-entry-generator/pkg/analyser/icbc"
+	"github.com/deb-sig/double-entry-generator/pkg/analyser/ndnp"
 	"github.com/deb-sig/double-entry-generator/pkg/analyser/td"
 
 	"github.com/deb-sig/double-entry-generator/pkg/analyser/alipay"
@@ -42,6 +43,8 @@ func New(providerName string) (Interface, error) {
 		return bmo.Bmo{}, nil
 	case consts.ProviderBocm:
 		return bocm.Bocm{}, nil
+	case consts.ProviderNdnp:
+		return ndnp.Ndnp{}, nil
 	default:
 		return nil, fmt.Errorf("Fail to create the analyser for the given name %s", providerName)
 	}
