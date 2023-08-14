@@ -36,4 +36,6 @@ const (
 	ProviderTd = "td"
 	//ProviderBmo is the name for BMO provider.
 	ProviderBmo = "bmo"
+	//ProviderBocm is the name for BOCM provider.
+	ProviderBocm = "bocm"
 )
