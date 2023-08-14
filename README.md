@@ -9,6 +9,7 @@
 - 中国工商银行
 - Toronto-Dominion Bank
 - Bank of Montreal
+- 中国交通银行
 
 目前记账语言支持：
 
@@ -28,6 +29,7 @@
                   icbc                                icbc
                   td                                  td
                   bmo                                 bmo
+                  bocm                                bocm
 ```
 
 ## 安装
@@ -73,7 +75,7 @@ double-entry-generator translate \
   ./example/alipay/example-alipay-records.csv
 ```
 
-其中 `--config` 是配置文件，默认情况下，使用支付宝作为提供方，也可手动指定 `--provider`。具体参考[使用文档](doc/double-entry-generator_translate.md)。默认生成的文件是 `default_output.beancount`，若有 `--output` 或 `-o` 指定输出文件，则会输出到指定的文件中。如上述例子会将转换结果输出至 `./example/alipay/example-alipay-output.beancount` 文件中。
+其中 `--config` 是配置文件，默认情况下，使用支付宝作为提供方，也可手动指定 `--provider` 。具体参考[使用文档](doc/double-entry-generator_translate.md)。默认生成的文件是 `default_output.beancount` ，若有 `--output` 或 `-o` 指定输出文件，则会输出到指定的文件中。如上述例子会将转换结果输出至 `./example/alipay/example-alipay-output.beancount` 文件中。
 
 #### 微信
 
@@ -401,7 +403,7 @@ alipay:
 
 </details></br>
 
-`defaultMinusAccount`, `defaultPlusAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户，`defaultPlusAccount` 是默认金额增加的账户。 `defaultCurrency` 是默认货币。
+`defaultMinusAccount` , `defaultPlusAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户， `defaultPlusAccount` 是默认金额增加的账户。 `defaultCurrency` 是默认货币。
 
 `alipay` is the provider-specific configuration. Alipay provider has rules matching mechanism.
 
@@ -414,16 +416,18 @@ alipay:
 - `time`（交易时间）的区间匹配。
   > 交易时间可写为以下两种形式：
   > - `11:00-13:00`
+
   > - `11:00:00-13:00:00`
+
   > 24 小时制，起始时间和终止之间之间使用 `-` 分隔。
 
 在单条规则中可以使用分隔符（sep）填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
 在单条规则中可以使用 `tag` 来设置流水的 [Tag](https://beancount.github.io/docs/beancount_language_syntax.html#tags)，使用 `sep` 作为分隔符。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
 匹配成功则使用规则中定义的 `targetAccount` 、 `methodAccount` 等账户覆盖默认定义账户。
 
@@ -433,7 +437,6 @@ alipay:
 
 `targetAccount` 与 `methodAccount` 的增减账户关系如下表：
 
-
 | 收/支 | 交易分类 | minusAccount  | plusAccount   |
 | ----- | -------- | ------------- | ------------- |
 | 收入  | *        | targetAccount | methodAccount |
@@ -442,7 +445,7 @@ alipay:
 | 其他  | *        | methodAccount | targetAccount |
 | 其他  | 退款     | targetAccount | methodAccount |
 
-> 当交易类型为「其他」时，需要自行手动定义借贷账户。此时本软件会认为 `methodAccount` 是贷账户，`targetAccount` 是借账户。
+> 当交易类型为「其他」时，需要自行手动定义借贷账户。此时本软件会认为 `methodAccount` 是贷账户， `targetAccount` 是借账户。
 
 ### 微信
 
@@ -528,7 +531,7 @@ wechat:
 
 </details></br>
 
-`defaultMinusAccount`, `defaultPlusAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户，`defaultPlusAccount` 是默认金额增加的账户。 `defaultCurrency` 是默认货币。
+`defaultMinusAccount` , `defaultPlusAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户， `defaultPlusAccount` 是默认金额增加的账户。 `defaultCurrency` 是默认货币。
 
 > `defaultCommissionAccount` 是默认的服务费账户，若无服务费相关交易，则不需要填写。但笔者还是建议填写一个占位 FIXME 账户，否则遇到带服务费的交易，转换器会报错退出。
 
@@ -543,16 +546,18 @@ wechat:
 - `time`（交易时间）的区间匹配。
   > 交易时间可写为以下两种形式：
   > - `11:00-13:00`
+
   > - `11:00:00-13:00:00`
+
   > 24 小时制，起始时间和终止之间之间使用 `-` 分隔。
 
 在单条规则中可以使用分隔符（sep）填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
 在单条规则中可以使用 `tag` 来设置流水的 [Tag](https://beancount.github.io/docs/beancount_language_syntax.html#tags)，使用 `sep` 作为分隔符。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
 匹配成功则使用规则中定义的 `targetAccount` 、 `methodAccount` 等账户覆盖默认定义账户。
 
@@ -596,7 +601,7 @@ huobi:
 
 </details></br>
 
-`defaultCashAccount`, `defaultPositionAccount`, `defaultCommissionAccount`, `defaultPnlAccount` 和 `defaultCurrency` 是全局的必填默认值。
+`defaultCashAccount` , `defaultPositionAccount` , `defaultCommissionAccount` , `defaultPnlAccount` 和 `defaultCurrency` 是全局的必填默认值。
 
 `huobi` is the provider-specific configuration. Huobi provider has rules matching mechanism.
 
@@ -607,16 +612,18 @@ huobi:
 - `time`（交易时间）的区间匹配。
   > 交易时间可写为以下两种形式：
   > - `11:00-13:00`
+
   > - `11:00:00-13:00:00`
+
   > 24 小时制，起始时间和终止之间之间使用 `-` 分隔。
 
 在单条规则中可以使用分隔符（sep）填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
-匹配成功则使用规则中定义的 `cashAccount`, `positionAccount`, `commissionAccount` 和 `pnlAccount` 覆盖默认定义。
+匹配成功则使用规则中定义的 `cashAccount` , `positionAccount` , `commissionAccount` 和 `pnlAccount` 覆盖默认定义。
 
 规则匹配的顺序是：从 `rules` 配置中的第一条开始匹配，如果匹配成功仍继续匹配。也就是后面的规则优先级要**高于**前面的规则。
 
@@ -654,7 +661,7 @@ htsec:
 
 </details></br>
 
-`defaultCashAccount`, `defaultPositionAccount`, `defaultCommissionAccount`, `defaultPnlAccount` 和 `defaultCurrency` 是全局的必填默认值。
+`defaultCashAccount` , `defaultPositionAccount` , `defaultCommissionAccount` , `defaultPnlAccount` 和 `defaultCurrency` 是全局的必填默认值。
 
 `htsec` is the provider-specific configuration. Htsec provider has rules matching mechanism.
 
@@ -664,16 +671,18 @@ htsec:
 - `time`（交易时间）的区间匹配。
   > 交易时间可写为以下两种形式：
   > - `11:00-13:00`
+
   > - `11:00:00-13:00:00`
+
       > 24 小时制，起始时间和终止之间之间使用 `-` 分隔。
 
 在单条规则中可以使用分隔符（sep）填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
-匹配成功则使用规则中定义的 `cashAccount`, `positionAccount`, `commissionAccount` 和 `pnlAccount` 覆盖默认定义。
+匹配成功则使用规则中定义的 `cashAccount` , `positionAccount` , `commissionAccount` 和 `pnlAccount` 覆盖默认定义。
 
 规则匹配的顺序是：从 `rules` 配置中的第一条开始匹配，如果匹配成功仍继续匹配。也就是后面的规则优先级要**高于**前面的规则。
 
@@ -711,7 +720,7 @@ icbc:
 
 </details></br>
 
-`defaultMinusAccount`, `defaultPlusAccount`, `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户，`defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
+`defaultMinusAccount` , `defaultPlusAccount` , `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户， `defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
 
 `icbc` 是中国工商银行相关的配置。它提供基于规则的匹配。可以指定：
 - `peer`（交易对方）的完全/包含匹配。
@@ -720,11 +729,11 @@ icbc:
 
 在单条规则中可以使用分隔符 `sep` 填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
 在单条规则中可以使用 `tag` 来设置流水的 [Tag](https://beancount.github.io/docs/beancount_language_syntax.html#tags)，使用 `sep` 作为分隔符。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
 匹配成功则使用规则中定义的 `targetAccount` 账户覆盖默认定义账户。
 
@@ -770,7 +779,7 @@ td:
 
 </details></br>
 
-`defaultMinusAccount`, `defaultPlusAccount`, `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户，`defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
+`defaultMinusAccount` , `defaultPlusAccount` , `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户， `defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
 
 `td` 是 Toronto-Dominion Bank相关的配置。它提供基于规则的匹配。因为TD本身的账单较简单，所以可以指定的规则不多：
 - `item`:（交易商品）的完全/包含匹配。
@@ -778,11 +787,11 @@ td:
 
 在单条规则中可以使用分隔符 `sep` 填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
 在单条规则中可以使用 `tag` 来设置流水的 [Beancount Tag](https://beancount.github.io/docs/beancount_language_syntax.html#tags)或[Ledger Meta Tag](https://ledger-cli.org/doc/ledger3.html#Metadata-tags)，使用 `sep` 作为分隔符。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
 匹配成功则使用规则中定义的 `targetAccount` 账户覆盖默认定义账户。
 
@@ -828,7 +837,7 @@ bmo:
 
 </details></br>
 
-`defaultMinusAccount`, `defaultPlusAccount`, `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户，`defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
+`defaultMinusAccount` , `defaultPlusAccount` , `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户， `defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
 
 `bmo` 是 Toronto-Dominion Bank相关的配置。它提供基于规则的匹配。因为BMO本身的账单较简单，所以可以指定的规则不多：
 - `item`:（交易商品）的完全/包含匹配。
@@ -836,17 +845,69 @@ bmo:
 
 在单条规则中可以使用分隔符 `sep` 填写多个关键字，在同一对象中，每个关键字之间是或的关系。
 
-在单条规则中可以使用 `fullMatch` 来设置字符匹配规则，`true` 表示使用完全匹配(full match)，`false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
 
 在单条规则中可以使用 `tag` 来设置流水的 [Beancount Tag](https://beancount.github.io/docs/beancount_language_syntax.html#tags)或[Ledger Meta Tag](https://ledger-cli.org/doc/ledger3.html#Metadata-tags)，使用 `sep` 作为分隔符。
 
-在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易，`true` 表示忽略匹配上该规则的交易，`fasle` 则为不忽略，缺省为 `false` 。
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
 
 匹配成功则使用规则中定义的 `targetAccount` 账户覆盖默认定义账户。
 
 规则匹配的顺序是：从 `rules` 配置中的第一条开始匹配，如果匹配成功仍继续匹配。也就是后面的规则优先级要**高于**前面的规则。
 
 BMO账单中的记账金额中存在收入/支出之分，通过这个机制就可以判断银行卡账户在交易中的正负关系。如支付宝配置类似，匹配成功则使用规则中定义的 `targetAccount` 和全局值 `defaultCashAccount` ，并通过确认该笔交易是收入还是支出，决定 `targetAccount` 和 `defaultCashAccount` 的正负关系，来覆盖默认定义的增减账户。
+
+`targetAccount` 与 `defaultCashAccount` 的增减账户关系如下表：
+
+| 收/支 | minusAccount       | plusAccount        |
+| ----- | ------------------ | ------------------ |
+| 收入  | targetAccount      | defaultCashAccount |
+| 支出  | defaultCashAccount | targetAccount      |
+
+#### 中国交通银行
+
+<details>
+<summary>
+  中国交通银行配置文件示例
+</summary>
+
+```yaml
+defaultMinusAccount: Assets:FIXME
+defaultPlusAccount: Expenses:FIXME
+defaultCashAccount: Assets:Bank:CN:BOCM
+defaultCurrency: CNY
+title: 测试
+bocm:
+  rules:
+    - txType: 财付通,支付宝
+      ignore: true
+    - item: 代发工资
+      targetAccount: Income:FIXME
+
+```
+
+</details></br>
+
+`defaultMinusAccount` , `defaultPlusAccount` , `defaultCashAccount` 和 `defaultCurrency` 是全局的必填默认值。其中 `defaultMinusAccount` 是默认金额减少的账户， `defaultPlusAccount` 是默认金额增加的账户， `defaultCashAccount` 是该配置中默认使用的银行卡账户（等同于支付宝/微信中的 `methodAccount` ）。 `defaultCurrency` 是默认货币。
+
+`bocm` 是 Toronto-Dominion Bank相关的配置。它提供基于规则的匹配。因为BMO本身的账单较简单，所以可以指定的规则不多：
+- `peer`（交易对方）的完全/包含匹配。
+- `type`（收/支）的完全/包含匹配。
+- `txType`（交易类型）的完全/包含匹配。
+
+在单条规则中可以使用分隔符 `sep` 填写多个关键字，在同一对象中，每个关键字之间是或的关系。
+
+在单条规则中可以使用 `fullMatch` 来设置字符匹配规则， `true` 表示使用完全匹配(full match)， `false` 表示使用包含匹配(partial match)，不设置该项则默认使用包含匹配。
+
+在单条规则中可以使用 `tag` 来设置流水的 [Beancount Tag](https://beancount.github.io/docs/beancount_language_syntax.html#tags)或[Ledger Meta Tag](https://ledger-cli.org/doc/ledger3.html#Metadata-tags)，使用 `sep` 作为分隔符。
+
+在单条规则中可以使用 `ignore` 来设置是否忽略匹配上该规则的交易， `true` 表示忽略匹配上该规则的交易， `fasle` 则为不忽略，缺省为 `false` 。
+
+匹配成功则使用规则中定义的 `targetAccount` 账户覆盖默认定义账户。
+
+规则匹配的顺序是：从 `rules` 配置中的第一条开始匹配，如果匹配成功仍继续匹配。也就是后面的规则优先级要**高于**前面的规则。
+
+BOCM账单中的记账金额中存在收入/支出之分，通过这个机制就可以判断银行卡账户在交易中的正负关系。如支付宝配置类似，匹配成功则使用规则中定义的 `targetAccount` 和全局值 `defaultCashAccount` ，并通过确认该笔交易是收入还是支出，决定 `targetAccount` 和 `defaultCashAccount` 的正负关系，来覆盖默认定义的增减账户。
 
 `targetAccount` 与 `defaultCashAccount` 的增减账户关系如下表：
 

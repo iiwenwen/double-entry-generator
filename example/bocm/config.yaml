@@ -1,0 +1,11 @@
+defaultMinusAccount: Assets:FIXME
+defaultPlusAccount: Expenses:FIXME
+defaultCashAccount: Assets:Bank:CN:BOCM
+defaultCurrency: CNY
+title: 测试
+bocm:
+  rules:
+    - txType: 财付通,支付宝
+      ignore: true
+    - item: 代发工资
+      targetAccount: Income:FIXME
