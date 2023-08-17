@@ -2,13 +2,11 @@ package ndnp
 
 //定义用于解析和转换交通银行账单数据的提供者类 Ndnp。该类包括统计信息、行号和交易列表
 import (
-	"encoding/csv"
 	"fmt"
-	"io"
 	"log"
 
-	"github.com/deb-sig/double-entry-generator/pkg/io/reader"
 	"github.com/deb-sig/double-entry-generator/pkg/ir"
+	"github.com/xuri/excelize/v2"
 )
 
 // Ndnp 是交通银行（NDNP）账户交易数据的提供者。
@@ -31,37 +29,28 @@ func New() *Ndnp {
 func (ndnp *Ndnp) Translate(filename string) (*ir.IR, error) {
 	log.SetPrefix("[Provider-NDNP] ")
 	// 获取提供的文件的读取器。
-	billReader, err := reader.GetReader(filename)
+	xlsxFile, err := excelize.OpenFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("can't get bill reader, err: %v", err)
+		return nil, err
+	}
+	rows, err := xlsxFile.GetRows("Sheet1")
+	if err != nil {
+		return nil, err
 	}
 
-	csvReader := csv.NewReader(billReader)
-	csvReader.LazyQuotes = true
-	// 如果 FieldsPerRecord 为负数，则不进行检查，记录可能有可变数量的字段
-	csvReader.FieldsPerRecord = -1
 	// 遍历 CSV 文件中的每一行，使用translateToOrders函数将csv数据放置ndnp.Orders。
-	for {
-		line, err := csvReader.Read()
-
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			return nil, err
-		}
-
+	for _, row := range rows {
 		ndnp.LineNum++
 		if ndnp.LineNum <= 1 {
-			// 前3行是头信息，跳过它们。
+			// The first line is xlsx file header.
 			continue
 		}
-		// 将 CSV 行转换为 Order 实例。
-		err = ndnp.translateToOrders(line)
+
+		err = ndnp.translateToOrders(row)
 		if err != nil {
-			return nil, fmt.Errorf("Failed to translate bill: line %d: %v",
-			ndnp.LineNum, err)
+			return nil, fmt.Errorf("Failed to translate bill: line %d: %v", ndnp.LineNum, err)
 		}
 	}
 	log.Printf("Finished to parse the file %s", filename)
-	return ndnp.convertToIR(), nil //将处理的数据转换为 IR 格式
+	return ndnp.convertToIR(), nil
 }

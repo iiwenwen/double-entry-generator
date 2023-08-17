@@ -5,7 +5,7 @@ import "time"
 
 const (
 	// localTimeFmt set time format to utc+8
-	localTimeFmt = "2006/1/2 15:04 -0700 CST"
+	localTimeFmt = "1/2/06 15:04 -0700 CST"
 )
 
 // Statistics 结构体表示账单文件的统计信息
